@@ -1,0 +1,105 @@
+﻿@model List<RedSocialWebApp.Core.Application.ViewModels.Publicaciones.PublicacionViewModel>
+
+@{
+    ViewData["Title"] = "Publicaciones";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-black">
+                    <h3 class="text-white">Tus publicaciones</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-3 offset-9 text-end">
+                            <a asp-action="Create" class="btn btn-outline-success">Crear publicación</a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        @if (Model == null || !Model.Any())
+                        {
+                            <h2>No hay publicaciones registradas.</h2>
+                        }
+                        else
+                        {
+                            @foreach (var publicacion in Model)
+                            {
+                                <div class="col-12 col-md-4 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <img src="@publicacion.UsuarioFotoPerfil" alt="Foto de perfil" class="img-fluid rounded-circle me-3" style="width: 50px; height: 50px;" />
+                                                <h4 class="mb-0">@publicacion.UsuarioNombre</h4>
+                                                <pre>   </pre>
+                                                <a asp-action="Edit" asp-route-id="@publicacion.Id" class="btn btn-sm btn-outline-info">Editar</a>
+                                                <pre> </pre>
+                                                <a asp-action="Delete" asp-route-id="@publicacion.Id" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                                            </div>
+                                            <p class="card-text">
+                                                <strong>Contenido:</strong> @publicacion.Contenido<br />
+                                                @if (!string.IsNullOrEmpty(publicacion.Imagen))
+                                                {
+                                                    <img src="@publicacion.Imagen" alt="Imagen de la publicación" class="img-fluid mb-3 w-100" />
+                                                }
+                                                @if (!string.IsNullOrEmpty(publicacion.VideoYouTube))
+                                                {
+                                                    <iframe width="360" height="315" src="@publicacion.VideoYouTube" frameborder="0"
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                            allowfullscreen>
+                                                    </iframe>
+                                                }
+                                                <br />
+                                                <strong>Publicado:</strong> @publicacion.Created
+                                            </p>
+
+                                            <!-- Sección para mostrar comentarios -->
+                                            <div class="mt-3">
+                                                <h5>Comentarios:</h5>
+                                                @foreach (var comentario in publicacion.Comentarios)
+                                                {
+                                                    <div class="d-flex mb-3">
+                                                        <img src="@comentario.UsuarioFotoPerfil" alt="Foto de perfil" class="img-fluid rounded-circle me-3" style="width: 40px; height: 40px;" />
+                                                        <div>
+                                                            <strong>@comentario.UsuarioNombre:</strong> @comentario.Contenido <br />
+                                                            <small class="text-muted">@comentario.Created</small>
+
+                                                            <!-- Botón de respuesta -->
+                                                            <button class="btn btn-link" data-toggle="collapse" data-target="#respuesta-@comentario.Id">Responder</button>
+                                                            <div class="collapse" id="respuesta-@comentario.Id">
+                                                                <form asp-action="AddComentarioRespuesta" method="post">
+                                                                    <input type="hidden" name="ComentarioPrincipalId" value="@publicacion.Id" />
+                                                                    <input type="hidden" name="ComentarioRespuestaId" value="@comentario.Id" />
+                                                                    <div class="form-group">
+                                                                        <textarea name="Respuesta" class="form-control mb-2" placeholder="Añadir una respuesta..."></textarea>
+                                                                    </div>
+                                                                    <button type="submit" class="btn btn-outline-primary btn-sm">Responder</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                                <!-- Formulario para agregar comentarios -->
+                                                <form asp-action="AddComentario" method="post">
+                                                    <input type="hidden" name="PublicacionId" value="@publicacion.Id" />
+                                                    <div class="form-group">
+                                                        <textarea name="Contenido" class="form-control mb-2" placeholder="Añadir un comentario..."></textarea>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-outline-primary btn-sm">Comentar</button>
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

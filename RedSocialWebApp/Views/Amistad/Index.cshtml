@@ -1,0 +1,62 @@
+﻿@model List<RedSocialWebApp.Core.Application.ViewModels.Usuario.UsuarioViewModel>
+
+@{
+    ViewData["Title"] = "Agregar usuarios";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <br />
+                <div class="card-header bg-black">
+                    <h3 class="text-white">Agregar usuarios</h3>
+                </div>
+                <div class="card-body">
+
+                    <form asp-action="Index" method="get" class="mb-3">
+                        <div class="input-group">
+                            <input type="text" name="searchTerm" class="form-control" placeholder="Buscar por nombre de usuario..." value="@ViewData["SearchTerm"]" />
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                        </div>
+                    </form>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var usuario in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img src="@usuario.FotoPerfil" alt="Foto de perfil" class="img-fluid rounded-circle me-3" style="width: 50px; height: 50px;" />
+                                            @usuario.Nombre
+                                        </td>
+                                        <td>
+                                            <form asp-action="Create" method="post">
+                                                <input type="hidden" name="UsuarioId" value="@usuario.Id" />
+                                                <button type="submit" class="btn btn-primary">Agregar como amigo</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else if (!string.IsNullOrEmpty((string)ViewData["SearchTerm"]))
+                    {
+                        <p>No se encontraron usuarios con el término de búsqueda especificado.</p>
+                    }
+
+                    <a asp-controller="Amistad" asp-action="AmigoPublicaciones" class="btn btn-warning">Volver atras</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

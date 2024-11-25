@@ -1,0 +1,103 @@
+﻿@using Microsoft.AspNetCore.Http
+@* @using RedSocialApp.Core.Application.Dtos.Account *@
+@using RedSocialWebApp.Core.Application.Helpers
+@using RedSocialWebApp.Core.Application.ViewModels.Usuario
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    // Obtener la información del usuario desde la sesión
+    var User = httpContextAccessor.HttpContext.Session.Get<UsuarioViewModel>("user");
+    var isLoggedIn = User != null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Angel Social Media App</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RedSocialApp.styles.css" asp-append-version="true" />
+    <style>
+        /* Estilos */
+        .navbar-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f8f9fa;
+            align-items: center;
+            height: 100vh;
+            width: 200px;
+            position: fixed;
+        }
+
+            .navbar-vertical .navbar-brand {
+                margin-bottom: 20px;
+            }
+
+            .navbar-vertical .user-image {
+                width: 100px;
+                height: 100px;
+                margin-left: auto;
+                margin-right: auto;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-bottom: 20px;
+                border: 2px solid #007bff;
+            }
+
+            .navbar-vertical .nav-link {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-vertical bg-black">
+            <ul class="navbar-nav ">
+                @if (isLoggedIn)
+                {
+                    <!-- Mostrar imagen del usuario logueado -->
+                    <img src="@User.FotoPerfil" alt="User Image" class="user-image" />
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Angel Social Media </a>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-area="" asp-controller="Amistad" asp-action="AmigoPublicaciones">Amigos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-area="" asp-controller="User" asp-action="Edit">Mi Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-area="" asp-controller="User" asp-action="LogOut">Cerrar sesion  (@User.NombreUsuario)</a>
+                    </li>
+                }
+                else
+                {
+                    <!-- Mostrar solo la opción de registrarse si no hay usuario logueado -->
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-area="" asp-controller="User" asp-action="Register">¡Registrate!</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </header>
+    <div class="container" style="margin-left: 220px;">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted fixed-bottom">
+        <div class="container">
+            &copy; @DateTime.Now.Year - AngelSocialMediaApp
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

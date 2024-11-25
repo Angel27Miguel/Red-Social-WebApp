@@ -1,0 +1,91 @@
+﻿@using RedSocialWebApp.Core.Application.ViewModels.Usuario
+@model SaveUsuarioViewModel
+@{
+    bool editMode = Model.Id != 0;
+    ViewData["Title"] = editMode ? "Editar Usuario" : "Registro de Nuevo Usuario";
+}
+<br />
+<br />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="card">
+                <div class="card-header bg-black text-light">
+                    <h4>@(editMode ? $"Editando usuario: {Model.Nombre} {Model.Apellido}" : "Registro de nuevo usuario")</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" asp-controller="User" asp-action="@(editMode ? "Edit" : "Register")">
+
+
+                        <div class="mb-3">
+                            <label asp-for="Nombre" class="form-label">Nombre: </label>
+                            <input asp-for="Nombre" class="form-control" />
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Apellido" class="form-label">Apellido: </label>
+                            <input asp-for="Apellido" class="form-control" />
+                            <span asp-validation-for="Apellido" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NombreUsuario" class="form-label">Nombre de Usuario:</label>
+                            <input asp-for="NombreUsuario" class="form-control" />
+
+                            @if (!string.IsNullOrEmpty(Model.NombreUsuarioError))
+                            {
+                                <span class="text-danger">@Model.NombreUsuarioError</span>
+                            }
+
+                            <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Correo" class="form-label">Correo: </label>
+                            <input asp-for="Correo" class="form-control" />
+                            <span asp-validation-for="Correo" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Telefono" class="form-label">Teléfono: </label>
+                            <input asp-for="Telefono" class="form-control" />
+                            <span asp-validation-for="Telefono" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label asp-for="File" class="form-label">Foto:</label>
+                            @if (editMode)
+                            {
+                                <input asp-for="File" class="form-control" />
+                            }
+                            else
+                            {
+                                <input required asp-for="File" class="form-control" />
+                            }
+                            <span asp-validation-for="File" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Contraseña" class="form-label">Contraseña:</label>
+                            <input asp-for="Contraseña" class="form-control" />
+                            <span asp-validation-for="Contraseña" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ConfirmarContraseña" class="form-label">Confirmar Contraseña:</label>
+                            <input asp-for="ConfirmarContraseña" class="form-control" />
+                            <span asp-validation-for="ConfirmarContraseña" class="text-danger"></span>
+                        </div>
+
+                        
+                        <input type="hidden" asp-for="Id" />
+
+                        <button type="submit" class="btn btn-primary">@(editMode ? "Actualizar" : "Guardar")</button>
+                        <a asp-controller="User" asp-action="Index" class="btn btn-warning">Volver atrás</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

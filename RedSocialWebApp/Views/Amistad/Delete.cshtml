@@ -1,0 +1,26 @@
+﻿@using RedSocialWebApp.Core.Application.ViewModels.Amistad
+@model SaveAmistadViewModel
+@{
+    ViewData["Title"] = "Eliminar Amigo";
+}
+
+<div class="row">
+    <div class="col-6 offset-3">
+        <div class="card">
+            <div class="card-header bg-warning text-Blak text-center">
+                <h4>Esta seguro que desea eliminar a tu amigo?</h4>
+
+            </div>
+            <div class="card-body text-center">
+                <form method="post" asp-controller="Amistad" asp-action="DeletePost">
+
+                    <input type="hidden" asp-for="Id" />
+
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <a asp-controller="Amistad" asp-action="ListAmigo" class="btn btn-primary">Volver atras</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
